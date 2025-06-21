@@ -24,8 +24,7 @@ driver = webdriver.Chrome(options=options)
 
 visits = random.randint(4, 7)  # הרצת מספר גולשים אמיתיים
 
-print(f"🟢 Simulating {visits} user visits...
-")
+print(f"🟢 Simulating {visits} user visits...")
 
 for i in range(visits):
     try:
