@@ -29,11 +29,10 @@ print(f"🟢 Simulating {visits} user visits...")
 for i in range(visits):
     try:
         url = random.choice(pages)
-        try:
         driver.set_page_load_timeout(20)
         driver.get(url)
-        except Exception as e:
-        print(f"⚠️ Failed to load {url}: {e}")
+    except Exception as e:
+        print(f"🔺 Failed to load {url}: {e}")
         continue
         now = datetime.now().strftime("%H:%M:%S")
         print(f"{now} | Visit {i+1}: {url}")
