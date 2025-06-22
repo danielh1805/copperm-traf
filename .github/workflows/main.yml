@@ -1,0 +1,26 @@
+name: Traffic Bot Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  traffic:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+
+    - name: Run Simple Bot
+      run: python simple_bot.py

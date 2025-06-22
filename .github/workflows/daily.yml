@@ -1,0 +1,22 @@
+name: Daily Simple Traffic Bot
+
+on:
+  schedule:
+    - cron: '*/30 4-12 * * *'  # Every 30 minutes between 07:00–15:00 Israel time
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install selenium
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+      - name: Run Simple Bot
+        run: python simple_bot.py

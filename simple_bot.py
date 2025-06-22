@@ -1,26 +1,26 @@
-
 from selenium import webdriver
-import time
-import random
 from selenium.webdriver.chrome.options import Options
+import time, random
 
-url = "https://copperm.com/"
+URL = "https://copperm.com/"
+VISITS = 3  # small number for testing
 
-options = Options()
-options.add_argument("--headless")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+chrome_options.binary_location = '/usr/bin/google-chrome'
 
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(options=chrome_options)
 
 try:
-    for i in range(3):  # Only 3 visits for testing
-        print(f"🔁 Visit {i+1}: {url}")
-        driver.get(url)
-        print(f"✅ Page title: {driver.title}")
-        time.sleep(random.uniform(10, 20))  # Short stay for test
-except Exception as e:
-    print(f"❌ Error: {e}")
+    for i in range(VISITS):
+        print(f"🔗 Visit {i+1}: {URL}")
+        driver.get(URL)
+        print(f"    Page title: {driver.title}")
+        wait = random.uniform(10, 20)
+        print(f"    ⏳ Waiting {wait:.1f} seconds")
+        time.sleep(wait)
 finally:
     driver.quit()
-    print("🏁 Finished test run.")
+    print("🏁 Finished run.")
