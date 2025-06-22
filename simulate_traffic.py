@@ -4,13 +4,16 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 
 def simulate_human(driver):
-    action = ActionChains(driver)
-    x = random.randint(100, 800)
-    y = random.randint(100, 600)
-    action.move_by_offset(x, y).perform()
-    time.sleep(random.uniform(0.5, 2))
-    action.move_by_offset(-x/2, -y/2).perform()
-    time.sleep(random.uniform(0.5, 2))
+    try:
+        action = ActionChains(driver)
+        x = random.randint(10, 100)
+        y = random.randint(10, 100)
+        action.move_by_offset(x, y).perform()
+        time.sleep(random.uniform(0.5, 1.5))
+        action.move_by_offset(-x/2, -y/2).perform()
+        time.sleep(random.uniform(0.5, 1.5))
+    except Exception as e:
+        print(f"⚠️ Mouse simulation skipped: {e}")
 
 def main():
     with open('links.json') as f:
