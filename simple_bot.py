@@ -1,36 +1,26 @@
+
+from selenium import webdriver
 import time
 import random
-from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-# Configuration
-URL = "https://copperm.com/"
-TOTAL_VISITS = random.randint(100, 150)
+url = "https://copperm.com/"
 
-def main():
-    print(f"📅 Planned visits for today: {TOTAL_VISITS}")
+options = Options()
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(options=options)
-    driver.set_window_size(1280, 800)
+driver = webdriver.Chrome(options=options)
 
-    visits_done = 0
-    for i in range(TOTAL_VISITS):
-        try:
-            print(f"🔗 Visit {i+1}: {URL}")
-            driver.get(URL)
-            wait_time = random.randint(40, 60)
-            print(f"⏳ Staying on page for {wait_time} seconds...")
-            time.sleep(wait_time)
-            visits_done += 1
-        except Exception as e:
-            print(f"❌ Error: {e}")
-
+try:
+    for i in range(3):  # Only 3 visits for testing
+        print(f"🔁 Visit {i+1}: {url}")
+        driver.get(url)
+        print(f"✅ Page title: {driver.title}")
+        time.sleep(random.uniform(10, 20))  # Short stay for test
+except Exception as e:
+    print(f"❌ Error: {e}")
+finally:
     driver.quit()
-    print(f"✅ Total visits completed: {visits_done}")
-
-if __name__ == "__main__":
-    main()
+    print("🏁 Finished test run.")
