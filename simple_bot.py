@@ -4,18 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 # Configuration
-URL = "https://copperm.com/metals/metal.html?metal=copper"
-START_HOUR = 7
-END_HOUR = 15
-
-def should_visit_now():
-    from datetime import datetime
-    hour = datetime.utcnow().hour + 3  # Adjust for Israel time
-    return START_HOUR <= hour < END_HOUR
+URL = "https://copperm.com/"
+TOTAL_VISITS = random.randint(100, 150)
 
 def main():
-    total_visits = random.randint(100, 150)
-    print(f"📅 Planned visits for today: {total_visits}")
+    print(f"📅 Planned visits for today: {TOTAL_VISITS}")
 
     options = Options()
     options.add_argument('--headless')
@@ -25,11 +18,7 @@ def main():
     driver.set_window_size(1280, 800)
 
     visits_done = 0
-    for i in range(total_visits):
-        if not should_visit_now():
-            print("⏸️ Outside of allowed hours (07:00–15:00). Skipping visit.")
-            continue
-
+    for i in range(TOTAL_VISITS):
         try:
             print(f"🔗 Visit {i+1}: {URL}")
             driver.get(URL)
