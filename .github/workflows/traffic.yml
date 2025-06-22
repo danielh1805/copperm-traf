@@ -1,28 +1,25 @@
-name: Simulate Realistic Site Traffic
+name: Daily Traffic Bot
 
 on:
   schedule:
-    - cron: "0 */4 * * *"  # כל 4 שעות
+    - cron: '0 10 * * *'
   workflow_dispatch:
 
 jobs:
-  simulate-traffic:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
+      - uses: actions/checkout@v3
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
-
+          python-version: '3.11'
       - name: Install dependencies
         run: |
-          pip install selenium
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
-          sudo ln -s /usr/bin/chromium-browser /usr/bin/google-chrome || true
-
-      - name: Run Selenium Traffic Script
+          pip install selenium requests
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+      - name: Fetch sitemap links
+        run: python fetch_sitemap.py
+      - name: Simulate traffic
         run: python simulate_traffic.py

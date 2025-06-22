@@ -1,58 +1,40 @@
+import time, random, json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-import time
-import random
-from datetime import datetime
+from selenium.webdriver.common.action_chains import ActionChains
 
-# רשימת עמודי כניסה
-pages = [
-    "https://copperm.com/",
-    "https://copperm.com/metals/metal.html?metal=aluminum",
-    "https://copperm.com/metals/metal.html?metal=copper",
-    "https://copperm.com/metals/metal.html?metal=iron"
-]
+def simulate_human(driver):
+    action = ActionChains(driver)
+    x = random.randint(100, 800)
+    y = random.randint(100, 600)
+    action.move_by_offset(x, y).perform()
+    time.sleep(random.uniform(0.5, 2))
+    action.move_by_offset(-x/2, -y/2).perform()
+    time.sleep(random.uniform(0.5, 2))
 
-# הגדרות דפדפן
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
+def main():
+    with open('links.json') as f:
+        links = json.load(f)
+    visits = random.randint(70, 100)
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(10)
 
-# יצירת הדפדפן
-driver = webdriver.Chrome(options=options)
+    for i in range(visits):
+        url = random.choice(links)
+        print(f"🔗 Visit {i+1}: {url}")
+        try:
+            driver.get(url)
+            time.sleep(random.uniform(5, 15))
+            simulate_human(driver)
+            driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
+            time.sleep(random.uniform(2, 5))
+        except Exception as e:
+            print(f"❌ Error visiting {url}: {e}")
+    driver.quit()
 
-visits = random.randint(4, 7)  # הרצת מספר גולשים אמיתיים
-
-print(f"🟢 Simulating {visits} user visits...")
-
-for i in range(visits):
-    try:
-        url = random.choice(pages)
-        driver.set_page_load_timeout(20)
-        driver.get(url)
-    except Exception as e:
-        print(f"🔺 Failed to load {url}: {e}")
-        continue
-
-
-    now = datetime.now().strftime("%H:%M:%S")
-    print(f"{now} | Visit {i+1}: {url}")
-
-    # שוהה באתר בין 30 ל-120 שניות
-    wait_time = random.randint(30, 120)
-    print(f"    ⏳ Waiting {wait_time} seconds...")
-    time.sleep(wait_time)
-
-    # נסה ללחוץ על לינק פנימי אקראי
-    links = driver.find_elements(By.TAG_NAME, "a")
-    internal_links = [a.get_attribute('href') for a in links if a.get_attribute('href') and 'copperm.com' in a.get_attribute('href')]
-    if internal_links:
-        next_url = random.choice(internal_links)
-        print(f"    🔗 Clicking on: {next_url}")
-        driver.get(next_url)
-        second_wait = random.randint(20, 60)
-        print(f"    ⏳ Waiting another {second_wait} seconds...")
-        time.sleep(second_wait)
-
-driver.quit()
+if __name__ == '__main__':
+    main()
