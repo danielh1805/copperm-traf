@@ -1,8 +1,8 @@
-name: Daily Traffic Bot
+name: Daily Simple Traffic Bot
 
 on:
   schedule:
-    - cron: '0 10 * * *'
+    - cron: '*/30 4-12 * * *'  # Every 30 minutes between 07:00–15:00 Israel time
   workflow_dispatch:
 
 jobs:
@@ -15,11 +15,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: |
-          pip install selenium requests
+        run: pip install selenium
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
-      - name: Fetch sitemap links
-        run: python fetch_sitemap.py
-      - name: Simulate traffic
-        run: python simulate_traffic.py
+      - name: Run Simple Bot
+        run: python simple_bot.py
